@@ -93,7 +93,7 @@ var exampleVM = new Vue({
 ###组件系统
 - 它提供了一种抽象，让我们可以用 **独立可复用的小组件** 来构建大型应用
 - 几乎任意类型的应用的界面都可以 **抽象为一个组件树**
-- ![](./images/components_model.png)
+- ![](./images/components_sys.png)
 ```HTML:
 
 <div id="app">
