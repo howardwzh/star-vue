@@ -159,7 +159,6 @@ vm.$watch('a', function (newVal, oldVal) {
 ```
 
 ###实例生命周期
-
 - Vue 实例在创建时有一系列初始化步骤——例如，它需要建立数据观察，编译模板，创建必要的数据绑定
 - 在此过程中，它也将调用一些生命周期钩子，给自定义逻辑提供运行机会
 ```
@@ -179,4 +178,135 @@ var vm = new Vue({
 ###生命周期图示
 ![](./images/life_cycle.png)
 
+##数据绑定语法
 
+###插值
+- 文本 `<span>Message: {{ msg }}</span>`
+- HTML `<div>{{{ raw_html }}}</div>`
+- HTML特性 `<div id="item-{{ id }}"></div>`
+
+
+###绑定表达式
+
+####JavaScript 表达式
+```
+{{ number + 1 }}
+
+{{ ok ? 'YES' : 'NO' }}
+
+{{ message.split('').reverse().join('') }}
+```
+
+####过滤器 
+- 以“管道符”指示 `{{ message | capitalize }}`
+- 过滤器可以串联 `{{ message | filterA | filterB }}`
+- 过滤器也可以接受参数 `{{ message | filterA 'arg1' arg2 }}`
+
+###指令
+- v-bind 指令用于响应地更新 HTML 特性
+```
+<a v-bind:href="url"></a>
+   ------ ----  ---
+     |      |    |
+    指令  参数  表达式
+```
+
+也可以这样 `href="{{url}}"` 实际上在内部特性插值会转为 v-bind 绑定
+
+- v-on 指令，它用于监听 DOM 事件
+```
+<a v-on:click="doSomething">
+   ---- -----  -----------
+     |    |         |
+    指令 参数    表达式
+```
+
+- 修饰符 (Modifiers) 是以半角句号 . 开始的特殊后缀
+```
+<a v-bind:href.literal="/a/b/c"></a>
+               -------
+                  |
+    修饰符告诉指令将它的值解析为一个字面字符串而不是一个表达式
+```
+
+###缩写
+- v- 前缀是一种标识模板中特定的 Vue 特性的视觉暗示
+- Vue.js 会管理所有的模板，此时 v- 前缀也没那么重要了
+- v-bind 缩写
+```
+<!-- 完整语法 -->
+<a v-bind:href="url"></a>
+
+<!-- 缩写 -->
+<a :href="url"></a>
+
+<!-- 完整语法 -->
+<button v-bind:disabled="someDynamicCondition">Button</button>
+
+<!-- 缩写 -->
+<button :disabled="someDynamicCondition">Button</button>
+```
+
+- v-on 缩写
+```
+<!-- 完整语法 -->
+<a v-on:click="doSomething"></a>
+
+<!-- 缩写 -->
+<a @click="doSomething"></a>
+```
+
+##计算属性
+- 基础例子
+```
+HTML:
+<div id="example">
+  a={{ a }}, b={{ b }}
+</div>
+
+JS:
+var vm = new Vue({
+  el: '#example',
+  data: {
+    a: 1
+  },
+  computed: {
+    // 一个计算属性的 getter
+    b: function () {
+      // `this` 指向 vm 实例
+      return this.a + 1
+    }
+  }
+})
+
+结果:
+a=1, b=2
+
+如果:
+console.log(vm.b) // -> 2
+vm.a = 2
+console.log(vm.b) // -> 3
+```
+**vm.b 的值始终取决于 vm.a 的值**
+
+- 计算 setter
+计算属性默认只是 getter，不过在需要时你也可以提供一个 setter：
+```
+// ...
+computed: {
+  fullName: {
+    // getter
+    get: function () {
+      return this.firstName + ' ' + this.lastName
+    },
+    // setter
+    set: function (newValue) {
+      var names = newValue.split(' ')
+      this.firstName = names[0]
+      this.lastName = names[names.length - 1]
+    }
+  }
+}
+// ...
+```
+vm.fullName = 'John Doe' 时，setter 会被调用，vm.firstName 和 vm.lastName 也会有相应更新
