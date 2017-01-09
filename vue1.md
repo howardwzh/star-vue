@@ -1,5 +1,5 @@
 # 学习资料
-- [官方教程](http://vuejs.org.cn/guide/)
+- [官方教程](http://v1-cn.vuejs.org/guide/)
 - [Vue.js——vue-router 60分钟快速入门](http://www.cnblogs.com/keepfool/p/5690366.html)
 
 ## 安装
