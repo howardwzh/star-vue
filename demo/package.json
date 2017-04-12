@@ -5,7 +5,7 @@
   "author": "PPMONEY\\wangzhonghua <wangzhonghua@ppmoney.com>",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "start /min cmd /c node app.js && node build/dev-server.js",
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
@@ -23,6 +23,7 @@
     "koa-jwt": "^3.2.1",
     "koa-logger": "^2.0.1",
     "koa-router": "^5.4.1",
+    "koa-static": "^3.0.0",
     "md5": "^2.2.1",
     "vue": "^2.2.2",
     "vue-router": "^2.3.0"

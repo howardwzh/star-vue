@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     user_name: {
       type: DataTypes.CHAR(50),
-      allowNull: true
+      allowNull: false
     },
     password: {
       type: DataTypes.CHAR(32),

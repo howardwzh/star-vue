@@ -15,7 +15,7 @@
                     {{ index + 1 }}. {{ item.content }}
                   </span>
                   <span class="pull-right">
-                    <el-button size="small" type="primary" @click="finished(index)">完成</el-button>
+                    <el-button size="small" type="primary" @click="update(index)">完成</el-button>
                     <el-button size="small" :plain="true" type="danger" @click="remove(index)">删除</el-button>
                   </span>
                 </div>
@@ -34,7 +34,7 @@
                   {{ index + 1 }}. {{ item.content }}
                 </span>
                 <span class="pull-right">
-                  <el-button size="small" type="primary" @click="restore(index)">还原</el-button>
+                  <el-button size="small" type="primary" @click="update(index)">还原</el-button>
                 </span>
               </div>
             </template> 
@@ -71,13 +71,14 @@ export default {
       this.id = ''
       this.name = ''
     }
+    this.getTodolist()
   },
   computed: { // 计算属性用于计算是否已经完成了所有任务
     Done () {
       let count = 0
       let length = this.list.length
       for (let i in this.list) {
-        this.list[i].status === true ? count += 1 : ''
+        this.list[i].status === 1 ? count += 1 : ''
       }
       this.count = count
       if (count === length || length === 0) {
@@ -89,18 +90,22 @@ export default {
   },
 
   methods: {
-    addTodos () {
-      if (this.todos === '') {
-        return
-      }
-      let obj = {
-        status: false,
-        content: this.todos
-      }
-      this.list.push(obj)
-      this.todos = ''
-    },
-    finished (index) {
+    update (index) {
+      this.$http.put('api/todolist/' + this.id + '/' + this.list[index].id + '/' + this.list[index].status)
+      .then((res) => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '任务状态更新成功！'
+          })
+          this.getTodolist()
+        } else {
+          this.$message.error('任务状态更新失败！')
+        }
+      }, (err) => {
+        this.$message.error('任务状态更新失败！')
+        console.log(err)
+      })
       this.$set(this.list[index], 'status', true) // 通过set的方法让数组的变动能够让Vue检测到
       this.$message({
         type: 'success',
@@ -108,17 +113,20 @@ export default {
       })
     },
     remove (index) {
-      this.list.splice(index, 1)
-      this.$message({
-        type: 'info',
-        message: '任务删除'
-      })
-    },
-    restore (index) {
-      this.$set(this.list[index], 'status', false)
-      this.$message({
-        type: 'info',
-        message: '任务还原'
+      this.$http.delete('api/todolist/' + this.id + '/' + this.list[index].id)
+      .then((res) => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '任务删除成功！'
+          })
+          this.getTodolist()
+        } else {
+          this.$message.error('任务删除失败！')
+        }
+      }, (err) => {
+        this.$message.error('任务删除失败！')
+        console.log(err)
       })
     },
     getUserInfo () {
@@ -129,6 +137,44 @@ export default {
       } else {
         return null
       }
+    },
+    getTodolist () {
+      this.$http.get('/api/todolist/' + this.id)
+      .then((res) => {
+        if (res.status === 200) {
+          this.list = res.data
+        } else {
+          this.$message.error('获取列表失败！')
+        }
+      }, (err) => {
+        this.$message.error('获取列表失败！')
+        console.log(err)
+      })
+    },
+    addTodos () {
+      if (this.todos === '') {
+        return
+      }
+      let obj = {
+        status: 0,
+        content: this.todos,
+        id: this.id
+      }
+      this.$http.post('/api/todolist', obj)
+      .then((res) => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '创建成功！'
+          })
+          this.getTodolist()
+        } else {
+          this.$message.error('创建失败！')
+        }
+      }, (err) => {
+        console.log(err)
+      })
+      this.todos = '' // 清空输入框
     }
   }
 }
