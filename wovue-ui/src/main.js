@@ -6,10 +6,20 @@ import router from './router'
 
 Vue.config.productionTip = false
 
+const appObj = {
+  title: 'vue'
+}
+
+router.beforeEach((to, from, next) => {
+  appObj.title = to.meta.title
+  next()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App :title="title" />',
+  data: appObj
 })

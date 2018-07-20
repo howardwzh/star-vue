@@ -1,8 +1,7 @@
 <template>
   <div id="home">
-    <Ceils>
-
-    </Ceils>
+    <a href="#/t-click-title-show-text">t-click-title-show-text</a>
+    <a href="#/ceil">ceil</a>
   </div>
 </template>
 

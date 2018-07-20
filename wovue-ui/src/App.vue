@@ -1,12 +1,15 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <h2>{{title}}</h2>
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    title: String
+  },
   name: 'App'
 }
 </script>
