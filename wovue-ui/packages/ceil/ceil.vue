@@ -11,7 +11,7 @@
       </slot>
     </div>
     <div class="wo-ceil-right" :class="{'has-arrow': arrow}">
-      <slot name="value">
+      <slot>
         <span class="wo-ceil-value" v-text="value"></span>
       </slot>
       <slot name="tip">
@@ -44,6 +44,7 @@ export default {
   padding: 0 16px;
   align-items: center;
   color: inherit;
+  font-size: 16px;
 }
 .wo-ceil img {
   width: 24px;
@@ -55,7 +56,6 @@ export default {
   text-align: left;
 }
 .wo-ceil-title {
-  font-size: 14px;
   vertical-align: middle;
 }
 .wo-ceil-label {
@@ -71,7 +71,6 @@ export default {
   margin-right: 16px;
 }
 .wo-ceil-value {
-  font-size: 14px;
   vertical-align: middle;
 }
 .wo-ceil-tip {
