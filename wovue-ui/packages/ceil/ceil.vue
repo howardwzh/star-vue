@@ -1,5 +1,5 @@
 <template>
-  <div class="wo-ceil">
+  <div class="wo-ceil" :class="{'hover-able': to}" @click="clickHandle">
     <slot name="icon">
     </slot>
     <div class="wo-ceil-left">
@@ -30,7 +30,15 @@ export default {
     label: String,
     value: String,
     tip: String,
-    arrow: Boolean
+    arrow: Boolean,
+    to: String
+  },
+  methods: {
+    clickHandle () {
+      if (this.to) {
+        window.location.href = this.to
+      }
+    }
   }
 }
 </script>
@@ -45,6 +53,29 @@ export default {
   align-items: center;
   color: inherit;
   font-size: 16px;
+}
+.wo-ceil::before {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  transform: scaleY(0.5);
+}
+.wo-ceil:last-child::after {
+  content: ' ';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  transform: scaleY(0.5);
+}
+.wo-ceil.hover-able {
+  cursor: pointer;
 }
 .wo-ceil img {
   width: 24px;
